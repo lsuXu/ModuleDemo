@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 
 /**
@@ -63,7 +62,7 @@ public class DBUtils {
         return connect;
     }
 
-    public static void query(final Connection conn, int id){
+    public static void query(final Connection conn){
         if(conn == null){
             Log.i(TAG,"connect 为空");
             return ;

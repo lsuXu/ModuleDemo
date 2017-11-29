@@ -58,7 +58,7 @@ public class DBActivity extends AppCompatActivity {
             }
             switch(v.getId()){
                 case R.id.findAllBtn:
-                    DBUtils.query(connection,1001);
+                    DBUtilsCommon.query(connection);
                     Log.i(TAG,"findAll");
                     break;
                 case R.id.insertBtn:
