@@ -1,0 +1,12 @@
+#创建数据库表
+create table message(
+id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+message text not null
+)AUTO_INCREMENT = 999;
+
+#插入数据
+insert into message(message) value ("helloWord");
+insert into message(message) value ("apple");
+insert into message(message) value ("pear");
+insert into message(message) value ("banana");
+insert into message(message) value ("ice cream");
