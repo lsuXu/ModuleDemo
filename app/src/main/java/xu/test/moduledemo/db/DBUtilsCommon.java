@@ -85,7 +85,7 @@ public class DBUtilsCommon {
             @Override
             public void run() {
                 try {
-                    PreparedStatement preparedStatement = conn.prepareStatement("select * from testCommon");
+                    PreparedStatement preparedStatement = conn.prepareStatement("delete from testCommon");
                     ResultSet resultSet = preparedStatement.executeQuery();
                     Bundle bundle = new Bundle();
                     //创建用于获取列信息和属性的对象

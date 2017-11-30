@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.sql.Connection;
 
@@ -23,6 +24,10 @@ public class DBActivity extends AppCompatActivity {
     private Button findAllBtn;
     private Button insertBtn;
     private Button deleteBtn;
+    private Button findOneBtn;
+
+    private EditText queryIdInput;
+    private EditText deleteIdInput;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,12 +43,17 @@ public class DBActivity extends AppCompatActivity {
         findAllBtn = (Button) findViewById(R.id.findAllBtn);
         insertBtn = (Button) findViewById(R.id.insertBtn);
         deleteBtn = (Button) findViewById(R.id.deleteBtn);
+        findOneBtn = (Button) findViewById(R.id.findOneBtn);
+
+        deleteIdInput = (EditText) findViewById(R.id.deleteIdInput);
+        queryIdInput = (EditText) findViewById(R.id.queryIdInput);
     }
 
     private void initClickListener(){
         findAllBtn.setOnClickListener(new CustomClickListener());
         insertBtn.setOnClickListener(new CustomClickListener());
         deleteBtn.setOnClickListener(new CustomClickListener());
+        findOneBtn.setOnClickListener(new CustomClickListener());
     }
 
 
@@ -58,15 +68,19 @@ public class DBActivity extends AppCompatActivity {
             }
             switch(v.getId()){
                 case R.id.findAllBtn:
-                    DBUtilsCommon.query(connection);
+                    DBUtils.query(connection);
                     Log.i(TAG,"findAll");
                     break;
                 case R.id.insertBtn:
+                    DBUtils.insert(connection,"hello message");
                     Log.i(TAG,"insert");
                     break;
                 case R.id.deleteBtn:
+                    DBUtils.delete(connection,Integer.parseInt(deleteIdInput.getText().toString()));
                     Log.i(TAG,"delete");
                     break;
+                case R.id.findOneBtn:
+                    DBUtils.queryOne(connection,Integer.parseInt(queryIdInput.getText().toString()));
             }
         }
     }
