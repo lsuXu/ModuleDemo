@@ -1,0 +1,16 @@
+daotools目录下所有文件均为GreenDao自动生成
+生成方式：在bean目录中创建实体类：
+    在表头添加@Entity
+    设定主键@Id
+    使用Build下的make工具即可。
+配置方式：
+    1.添加greenDao依赖
+    2.在build.gradle中android下加入配置：
+    greendao{
+            //指定数据库schema版本号
+            schemaVersion 1
+            //dao的包名，包名默认是entity所在的包
+            daoPackage 'xu.test.moduledemo.sqlitedb.daotools'
+            //生成数据库文件的目录;
+            targetGenDir 'src/main/java'
+        }

@@ -7,11 +7,26 @@
     android:layout_height="match_parent"
     tools:context="xu.test.moduledemo.MainActivity">
 
-    <Button
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/moduleGroupLineraLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="mysql数据库连接测试"
-        android:id="@+id/dbmodule"/>
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/mysqlDbBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mysql数据库连接测试" />
+
+        <Button
+            android:id="@+id/sqliteDbBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sqlite数据库测试" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
 
     <TextView
         android:layout_width="wrap_content"

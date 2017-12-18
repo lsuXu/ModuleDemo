@@ -1,0 +1,27 @@
+#创建数据库表
+create table message(
+id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+message text not null
+)AUTO_INCREMENT = 999;
+
+#插入数据
+insert into message(message) value ("helloWord");
+insert into message(message) value ("apple");
+insert into message(message) value ("pear");
+insert into message(message) value ("banana");
+insert into message(message) value ("ice cream");
+
+#创建通用测试数据表
+create table testCommon(
+id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+name text not null,
+message text not null,
+age int not null
+
+)AUTO_INCREMENT = 1;
+
+#插入数据
+insert into testCommon(name,message,age) value ("Alice","helloWord",21);
+insert into testCommon(name,message,age) value ("Tom","apple",18);
+insert into testCommon(name,message,age) value ("helloword","banana",0);
+insert into testCommon(name,message,age) value ("Marry","ice cream",26);

@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import xu.test.moduledemo.db.DBActivity;
+import xu.test.moduledemo.mysqldb.MysqlDBActivity;
+import xu.test.moduledemo.sqlitedb.SqliteDBActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button dbModuleBtn ;
+    Button mysqlDbBtn ;
+    Button sqliteDbBtn ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +23,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView(){
-        dbModuleBtn = (Button) findViewById(R.id.dbmodule);
+        mysqlDbBtn = (Button) findViewById(R.id.mysqlDbBtn);
+        sqliteDbBtn = (Button) findViewById(R.id.sqliteDbBtn);
     }
 
     private void initOnClickEvent(){
-        dbModuleBtn.setOnClickListener(new CustomerOnclick());
-
+        mysqlDbBtn.setOnClickListener(new CustomerOnclick());
+        sqliteDbBtn.setOnClickListener(new CustomerOnclick());
     }
 
     public class CustomerOnclick implements View.OnClickListener{
@@ -35,8 +38,11 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent intent = new Intent();
             switch(v.getId()){
-                case R.id.dbmodule:
-                    intent.setClass(MainActivity.this,DBActivity.class);
+                case R.id.mysqlDbBtn:
+                    intent.setClass(MainActivity.this,MysqlDBActivity.class);
+                    break;
+                case R.id.sqliteDbBtn:
+                    intent.setClass(MainActivity.this, SqliteDBActivity.class);
                     break;
             }
             startActivity(intent);
