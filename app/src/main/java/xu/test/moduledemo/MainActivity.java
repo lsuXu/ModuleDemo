@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xu.test.moduledemo.mysqldb.MysqlDBActivity;
+import xu.test.moduledemo.rxjavaTest.RXMainActivity;
 import xu.test.moduledemo.sqlitedb.SqliteDBActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,10 +17,15 @@ public class MainActivity extends AppCompatActivity {
     Button mysqlDbBtn ;
     Button sqliteDbBtn ;
 
+    @BindView(R.id.rxTestBtn)
+    Button rxTestBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         initView();
         initOnClickEvent();
     }
@@ -28,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initOnClickEvent(){
+        rxTestBtn.setOnClickListener(new CustomerOnclick());
         mysqlDbBtn.setOnClickListener(new CustomerOnclick());
         sqliteDbBtn.setOnClickListener(new CustomerOnclick());
     }
@@ -43,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.sqliteDbBtn:
                     intent.setClass(MainActivity.this, SqliteDBActivity.class);
+                    break;
+                case R.id.rxTestBtn:
+                    intent.setClass(MainActivity.this, RXMainActivity.class);
                     break;
             }
             startActivity(intent);

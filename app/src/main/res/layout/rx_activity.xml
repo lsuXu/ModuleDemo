@@ -11,8 +11,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="插入数据A"
-        android:id="@+id/insertBtn"/>
+        android:text="sendData"
+        android:id="@+id/sendData"/>
 
     <Button
         android:layout_height="wrap_content"
@@ -20,16 +20,5 @@
         android:text="查询所有A"
         android:id="@+id/queryAllBtn"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="插入数据B"
-        android:id="@+id/insertBtnB"/>
-
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="查询所有B"
-        android:id="@+id/queryAllBtnB"/>
 
 </LinearLayout>

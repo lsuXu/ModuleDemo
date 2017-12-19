@@ -22,10 +22,15 @@ public class Unique {
      */
     @Id(autoincrement = true)
     private Long id;
+    //唯一标识id,通过uuid生成
     private String unique_code;
+    //设备标志，存储蓝牙地址，用于区分设备
     private String bt_mac;
+    //周期开始事件
     private String start_time;
+    //周期结束事件
     private String end_time;
+    //记录创建事件
     private String create_time;
     public String getCreate_time() {
         return this.create_time;

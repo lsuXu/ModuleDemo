@@ -1,11 +1,8 @@
 package xu.test.moduledemo.sqlitedb.bean;
 
-import com.google.gson.Gson;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
-import java.lang.annotation.*;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -22,10 +19,15 @@ public class Btn {
      */
     @Id(autoincrement = true)
     private Long id;
+    //唯一标识
     private Long unique_id;
+    //按钮标识
     private String button_code;
+    //点击时间
     private String click_time;
+    //产品标识
     private String product_code;
+    //记录创建时间
     private String create_time;
     public String getCreate_time() {
         return this.create_time;
@@ -77,4 +79,15 @@ public class Btn {
     public Btn() {
     }
 
+    @Override
+    public String toString() {
+        return "Btn{" +
+                "id=" + id +
+                ", unique_id=" + unique_id +
+                ", button_code='" + button_code + '\'' +
+                ", click_time='" + click_time + '\'' +
+                ", product_code='" + product_code + '\'' +
+                ", create_time='" + create_time + '\'' +
+                '}';
+    }
 }

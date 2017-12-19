@@ -4,10 +4,14 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.ToOne;
 
 import org.greenrobot.greendao.DaoException;
 
+import java.util.List;
+
+import xu.test.moduledemo.sqlitedb.bean.Btn;
 import xu.test.moduledemo.sqlitedb.bean.Customer;
 import xu.test.moduledemo.sqlitedb.bean.Unique;
 import xu.test.moduledemo.sqlitedb.daotools.DaoSession;
@@ -181,6 +185,5 @@ public class A {
     @Generated(hash = 2349630)
     public A() {
     }
-
 
 }

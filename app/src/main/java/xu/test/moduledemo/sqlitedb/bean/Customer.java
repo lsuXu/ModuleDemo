@@ -23,13 +23,21 @@ public class Customer {
      */
     @Id(autoincrement = true)
     private Long id;
+    // 唯一标识id
     private Long unique_id;
+    //顾客标识
     private String customer_code;
+    //性别
     private String sex;
+    //年龄
     private String age;
+    //顾客进入时间
     private String entry_time;
+    //顾客离开时间
     private String end_time;
+    //对应图片名称
     private String img_name;
+    //记录创建时间
     private String create_time;
     public String getCreate_time() {
         return this.create_time;
