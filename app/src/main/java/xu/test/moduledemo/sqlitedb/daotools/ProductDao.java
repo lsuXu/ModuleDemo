@@ -1,16 +1,18 @@
 package xu.test.moduledemo.sqlitedb.daotools;
 
 import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
+import org.greenrobot.greendao.internal.SqlUtils;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
-import org.greenrobot.greendao.query.Query;
-import org.greenrobot.greendao.query.QueryBuilder;
+
+import xu.test.moduledemo.sqlitedb.bean.Unique;
 
 import xu.test.moduledemo.sqlitedb.bean.Product;
 
@@ -35,7 +37,8 @@ public class ProductDao extends AbstractDao<Product, Long> {
         public final static Property Create_time = new Property(5, String.class, "create_time", false, "CREATE_TIME");
     }
 
-    private Query<Product> b_ProductListQuery;
+    private DaoSession daoSession;
+
 
     public ProductDao(DaoConfig config) {
         super(config);
@@ -43,6 +46,7 @@ public class ProductDao extends AbstractDao<Product, Long> {
     
     public ProductDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -134,6 +138,12 @@ public class ProductDao extends AbstractDao<Product, Long> {
     }
 
     @Override
+    protected final void attachEntity(Product entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
+    }
+
+    @Override
     public Long readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
@@ -186,18 +196,95 @@ public class ProductDao extends AbstractDao<Product, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "productList" to-many relationship of B. */
-    public List<Product> _queryB_ProductList(Long unique_id) {
-        synchronized (this) {
-            if (b_ProductListQuery == null) {
-                QueryBuilder<Product> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.Unique_id.eq(null));
-                b_ProductListQuery = queryBuilder.build();
-            }
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getUniqueDao().getAllColumns());
+            builder.append(" FROM PRODUCT T");
+            builder.append(" LEFT JOIN UNIQUE T0 ON T.\"UNIQUE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
         }
-        Query<Product> query = b_ProductListQuery.forCurrentThread();
-        query.setParameter(0, unique_id);
-        return query.list();
+        return selectDeep;
+    }
+    
+    protected Product loadCurrentDeep(Cursor cursor, boolean lock) {
+        Product entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        Unique unique = loadCurrentOther(daoSession.getUniqueDao(), cursor, offset);
+        entity.setUnique(unique);
+
+        return entity;    
     }
 
+    public Product loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<Product> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<Product> list = new ArrayList<Product>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<Product> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<Product> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }

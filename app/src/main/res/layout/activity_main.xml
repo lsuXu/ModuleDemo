@@ -31,6 +31,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RXTest" />
+        <Button
+            android:id="@+id/compressCaseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="压缩文件测试" />
+        <Button
+            android:id="@+id/faceRecognitionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="人脸识别测试" />
 
     </android.support.v7.widget.LinearLayoutCompat>
 

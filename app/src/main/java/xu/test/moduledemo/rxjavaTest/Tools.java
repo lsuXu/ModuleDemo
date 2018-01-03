@@ -17,7 +17,7 @@ public class Tools {
         @Override
         public void call(Subscriber<? super String> subscriber) {
 
-            subscriber.onNext("Hi，Weavey！");  //发送数据"Hi，Weavey！"
+            subscriber.onNext("Hi，Weavey！");  //发送数据
         }
     });
     public Tools(Observer re){
@@ -34,7 +34,7 @@ public class Tools {
             @Override
             public void call(Subscriber<? super String> subscriber) {
 
-                subscriber.onNext("Hi，jjjjjjjj！");  //发送数据"Hi，Weavey！"
+                subscriber.onNext("Hi，jjjjjjjj！");  //发送数据
             }
         }).observeOn(AndroidSchedulers.mainThread()).subscribe(receiver);
 
