@@ -17,6 +17,7 @@ import xu.test.moduledemo.faceRecognition.FaceRecognitionActivity;
 import xu.test.moduledemo.mysqldb.MysqlDBActivity;
 import xu.test.moduledemo.rxjavaTest.RXMainActivity;
 import xu.test.moduledemo.sqlitedb.SqliteDBActivity;
+import xu.test.moduledemo.webView.WebViewActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.faceRecognitionBtn)
     Button faceRecognitionBtn;
+
+    @BindView(R.id.webViewBtn)
+    Button webViewBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         sqliteDbBtn.setOnClickListener(new CustomerOnclick());
         compressCaseBtn.setOnClickListener(new CustomerOnclick());
         faceRecognitionBtn.setOnClickListener(new CustomerOnclick());
+        webViewBtn.setOnClickListener(new CustomerOnclick());
     }
 
     public class CustomerOnclick implements View.OnClickListener{
@@ -87,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.faceRecognitionBtn:
                     intent.setClass(MainActivity.this, DetecterActivity.class);
+                    break;
+                case R.id.webViewBtn:
+                    intent.setClass(MainActivity.this, WebViewActivity.class);
+                    break;
             }
             startActivity(intent);
         }

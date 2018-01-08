@@ -16,12 +16,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--mysql数据库测试案例-->
         <activity android:name=".mysqldb.MysqlDBActivity"/>
+        <!--sqlite数据库测试案例-->
         <activity android:name=".sqlitedb.SqliteDBActivity"/>
+        <!--rxJava简单测试案例-->
         <activity android:name=".rxjavaTest.RXMainActivity"/>
+        <!--文件压缩测试案例-->
         <activity android:name=".compress.CompressActivity"/>
+        <!--人脸识别之年龄性别识别测试案例，调用虹软SDK-->
         <activity android:name=".faceRecognition.FaceRecognitionActivity"/>
         <activity android:name=".faceRecognition.DetecterActivity"/>
+        <!--webView组件测试案例-->
+        <activity android:name=".webView.WebViewActivity"/>
 
     </application>
 
@@ -30,4 +37,5 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" ></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" ></uses-permission>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
