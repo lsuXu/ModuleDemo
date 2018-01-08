@@ -21,6 +21,8 @@
         <activity android:name=".rxjavaTest.RXMainActivity"/>
         <activity android:name=".compress.CompressActivity"/>
         <activity android:name=".faceRecognition.FaceRecognitionActivity"/>
+        <activity android:name=".faceRecognition.DetecterActivity"/>
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>

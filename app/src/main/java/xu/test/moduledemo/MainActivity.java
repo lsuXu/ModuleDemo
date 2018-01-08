@@ -12,6 +12,7 @@ import android.widget.Button;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xu.test.moduledemo.compress.CompressActivity;
+import xu.test.moduledemo.faceRecognition.DetecterActivity;
 import xu.test.moduledemo.faceRecognition.FaceRecognitionActivity;
 import xu.test.moduledemo.mysqldb.MysqlDBActivity;
 import xu.test.moduledemo.rxjavaTest.RXMainActivity;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.setClass(MainActivity.this, CompressActivity.class);
                     break;
                 case R.id.faceRecognitionBtn:
-                    intent.setClass(MainActivity.this, FaceRecognitionActivity.class);
+                    intent.setClass(MainActivity.this, DetecterActivity.class);
             }
             startActivity(intent);
         }
