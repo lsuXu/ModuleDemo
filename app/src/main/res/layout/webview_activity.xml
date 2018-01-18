@@ -3,15 +3,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <Button
+        android:id="@+id/downloadBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="helloword" />
+        android:text="DownLoad web File"/>
+    <Button
+        android:id="@+id/changeWebView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change web view"/>
 
     <WebView
         android:id="@+id/baiduWebView"
         android:layout_width="match_parent"
-        android:layout_height="450dp">
+        android:layout_height="match_parent">
 
     </WebView>
 

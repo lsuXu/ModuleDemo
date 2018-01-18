@@ -46,6 +46,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="WebView测试"/>
+        <Button
+            android:id="@+id/alarmManageTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="alarmManageTest测试"/>
+        <Button
+            android:id="@+id/normalCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="常规验证"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
