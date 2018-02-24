@@ -56,6 +56,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="常规验证"/>
+        <Button
+            android:id="@+id/linuxCommandBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="linux命令测试"/>
+        <Button
+            android:id="@+id/openCvFaceComp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="对比人脸"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
 

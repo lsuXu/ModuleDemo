@@ -1,9 +1,22 @@
 package xu.test.moduledemo.rxjavaTest;
 
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
+
+import android.util.Log;
+import android.util.TimeUtils;
+
+import org.reactivestreams.Subscriber;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by 12852 on 2017/12/19.
@@ -11,35 +24,71 @@ import rx.android.schedulers.AndroidSchedulers;
 
 public class Tools {
 
-    private Observer<String> receiver;
-    Observable<String> sender = Observable.create(new Observable.OnSubscribe<String>() {
+    Disposable dis;
 
-        @Override
-        public void call(Subscriber<? super String> subscriber) {
 
-            subscriber.onNext("Hi，Weavey！");  //发送数据
-        }
-    });
-    public Tools(Observer re){
-        this.receiver = re;
-        sender.subscribe(receiver);
+    public Tools(){
+
     }
 
     Observable<String> subscriber = Observable.just("helllo");
 
 
     public void send(){
-        Observable.create(new Observable.OnSubscribe<String>() {
-
+        Observable ob = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void call(Subscriber<? super String> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter observableEmitter) throws Exception {
+                observableEmitter.onNext("hh");
+                observableEmitter.onNext("hh1");
+                observableEmitter.onNext("hh2");
+                observableEmitter.onNext("hh3");
+                observableEmitter.onNext("hh4");
 
-                subscriber.onNext("Hi，jjjjjjjj！");  //发送数据
             }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribe(receiver);
+        }).throttleFirst(15,TimeUnit.MILLISECONDS);
+        ob.doOnNext(new Consumer() {
+            @Override
+            public void accept(Object o) throws Exception {
+                Log.i("matTest","11111111111" + o);
+            }
+        });
+        Consumer c = new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                Log.i("matTest",s);
+            }
+        };
+        try {
+            ob.subscribe(c);
+        }catch (Exception e){
+            Log.e("matTest","error:" + e.getMessage());
+            e.printStackTrace();
+        }
 
-        subscriber.subscribe(receiver);
+    }
+//    Observable o = Observable.create(new ObservableOnSubscribee<Integer>);
+
+    public void cycleSend() {
+
+        //用于执行周期的心跳间隔轮询任务
+        dis = Flowable.interval(1500, TimeUnit.MILLISECONDS).throttleFirst(3000,TimeUnit.MILLISECONDS).doOnNext(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                Log.i("matTest","doOnNext" + aLong + "");
+            }
+        }).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                Log.i("matTest","subscribe:"  + aLong);
+                if(aLong == 10){
+
+                }
+            }
+        });
 
     }
 
+    public void stopHeart() {
+        dis.dispose();
+    }
 }

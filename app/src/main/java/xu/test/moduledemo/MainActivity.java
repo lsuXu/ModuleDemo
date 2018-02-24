@@ -5,8 +5,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,17 +14,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.igexin.sdk.PushManager;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xu.test.moduledemo.alarmManager.AlarmManagerReceiver;
 import xu.test.moduledemo.compress.CompressActivity;
 import xu.test.moduledemo.faceRecognition.DetecterActivity;
-import xu.test.moduledemo.faceRecognition.FaceRecognitionActivity;
+import xu.test.moduledemo.getui.DemoIntentService;
+import xu.test.moduledemo.getui.DemoPushService;
 import xu.test.moduledemo.mysqldb.MysqlDBActivity;
+import xu.test.moduledemo.opencvFace.OpenCvFaceComp;
 import xu.test.moduledemo.rxjavaTest.RXMainActivity;
 import xu.test.moduledemo.sqlitedb.SqliteDBActivity;
 import xu.test.moduledemo.webView.WebViewActivity;
@@ -34,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private static Context con;
     Button mysqlDbBtn ;
     Button sqliteDbBtn ;
+
+    static {
+        System.loadLibrary("opencv_java3");
+    }
 
     AlarmManagerReceiver alarmManagerReceiver;
 
@@ -59,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.normalCheck)
     Button normalCheckBtn;
 
+    @BindView(R.id.linuxCommandBtn)
+    Button linuxCommandBtn;
+
+    @BindView(R.id.openCvFaceComp)
+    Button openCvComp ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         
@@ -78,6 +96,14 @@ public class MainActivity extends AppCompatActivity {
                     , 1);
         }
         con = this;
+        //初始化SDK
+        PushManager.getInstance().initialize(this.getApplicationContext(), DemoPushService.class);
+        //注册IntentService类
+        PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), DemoIntentService.class);
+        //获取设备cid
+        String cid = PushManager.getInstance().getClientid(this.getApplicationContext());
+        Log.i("GTIntentService","cid = " + cid);
+
         initView();
         initOnClickEvent();
     }
@@ -94,8 +120,10 @@ public class MainActivity extends AppCompatActivity {
         compressCaseBtn.setOnClickListener(new JumpPageOnClick());
         faceRecognitionBtn.setOnClickListener(new JumpPageOnClick());
         webViewBtn.setOnClickListener(new JumpPageOnClick());
+        openCvComp.setOnClickListener(new JumpPageOnClick());
         alarmManageTest.setOnClickListener(new EventOnClick());
         normalCheckBtn.setOnClickListener(new EventOnClick());
+        linuxCommandBtn.setOnClickListener(new EventOnClick());
     }
 
     public class JumpPageOnClick implements View.OnClickListener{
@@ -122,6 +150,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.webViewBtn:
                     intent.setClass(MainActivity.this, WebViewActivity.class);
                     break;
+                case R.id.openCvFaceComp:
+                    intent.setClass(MainActivity.this, OpenCvFaceComp.class);
+                    break;
                 default:
                     break;
             }
@@ -146,6 +177,92 @@ public class MainActivity extends AppCompatActivity {
                     for(int i:ints){
                         Log.i("arrayTest","" + i);
                     };
+                    break;
+                case R.id.linuxCommandBtn:
+                    /*Process process = Runtime.getRuntime().exec("su");
+                    os = new DataOutputStream(process.getOutputStream());
+                    os.writeBytes(command + "\n");
+                    os.writeBytes("exit\n");
+                    os.flush();
+                    process.waitFor();*/
+                    try {
+                        //未获取到root权限
+                        List<String> commandList = new ArrayList<String>();
+                        commandList.add("mkdir");
+                        commandList.add("demo");
+                        commandList.add("hello");
+                        commandList.add("success.txt");
+
+                            ProcessBuilder pb = new ProcessBuilder(commandList);
+//                        String pathPaid = "";
+                        pb.directory(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/AAA"));
+//                        Log.i("testLinuxCommand",pb.directory().getAbsolutePath());
+                        Process process = pb.start();
+//                        Process process = Runtime.getRuntime().exec("mkdir demo");
+                        BufferedReader brE = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+//                        BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        String line;
+                        Log.i("testLinuxCommand",pb.directory().getAbsolutePath());
+                        while ((line = br.readLine()) != null) {
+                            System.out.println(line);
+                            Log.i("testLinuxCommand",line);
+                        }
+                        String lineError;
+                        while ((lineError = brE.readLine()) != null) {
+                            System.out.println(lineError);
+                            Log.e("testLinuxCommand",lineError);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    /*String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/AAA";
+
+                    String pathPaid = "/storage/emulated/legacy/AAA";
+                    ProcessBuilder pb = new ProcessBuilder("su","-c","mkdir" + "demo");
+//                    ProcessBuilder pb = new ProcessBuilder("ls ", "-l ","mkdir ","web.zip");
+                    pb.directory(new File(path));  //切换到工作目录 /AAA
+
+                    Log.i("testLinuxCommand",pb.directory().getAbsolutePath());
+                    try {
+                        Process p = pb.start();
+
+                        BufferedReader brE = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+//                        BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                        BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            System.out.println(line);
+                            Log.i("testLinuxCommand",line);
+                        }
+                        String lineError;
+                        while ((lineError = br.readLine()) != null) {
+                            System.out.println(lineError);
+                            Log.i("testLinuxCommand",lineError);
+                        }
+                    } catch (IOException e) {
+                        Log.e("testLinuxCommand","错误：" + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    Log.i("testLinuxCommand","linuxCommandBtn");*/
+                    /*String s = "\n";
+                    try {
+                        String[] cmdline = { "sh", "-c","cd /AAA && ls -l","mkdir demo"};
+                        Process p = Runtime.getRuntime().exec(cmdline);
+                        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                        String line = null;
+                        //PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(p.getOutputStream())), true);
+                        //out.println(cmd);
+                        while ((line = in.readLine()) != null) {
+                            s += line + "\n";
+                        }
+                        in.close();
+//          out.close();
+                        Log.v("testLinuxCommand", s);
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }*/
                 default:
                     break;
             }
